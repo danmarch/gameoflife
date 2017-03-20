@@ -1,8 +1,14 @@
 var $container = $("<div></div>").css("float", "left");
 var boxids = [];
 var grid = [];
+var n;
+var m;
 
-function addcontainer(n, m) {
+function addcontainer(x, y) {
+
+	n = x;
+	m = y;
+
 	grid[-1] = [];
 	grid[n] = [];
 	for (var i = 0; i < n; i++) {
@@ -15,12 +21,14 @@ function addcontainer(n, m) {
 			grid[n][j] = 0;
 			var boxij = $("<div></div>");
 			var boxid = i+","+j;
+
 			boxids.push(boxid);
 			$(boxij).attr('id', boxid);
 	    boxij.addClass("box").appendTo($container);
 	  }
 	  $("<div></div>").css("clear", "both").appendTo($container);
 	}
+
 	grid[n][m] = 0;
 	grid[-1][m] = 0;
 	grid[n][-1] = 0;
@@ -40,7 +48,7 @@ function flipcell(id) {
 	}
 }
 
-function step(n, m) {
+function step() {
 	var toflip = [];
 	for (var i = 0; i < n; i++) {
 		for (var j = 0; j < m; j++) {
@@ -56,6 +64,26 @@ function step(n, m) {
 		}
 	}
 	toflip.forEach(flipcell);
+}
+
+var interval = 0;
+function run() {
+	clearInterval(interval);
+	interval = setInterval(step, 200);
+}
+
+function stop() {
+	clearInterval(interval);
+}
+
+function clearboard() {
+	stop();
+  for (i = 0; i < n; ++i) {
+		for (j = 0; j < m; ++j) {
+      grid[i][j] = 1;
+		}
+  }
+	boxids.forEach(flipcell);
 }
 
 $(function() {
